@@ -1,0 +1,116 @@
+{
+  "default_content_top": {
+    "header": {
+      "columns": [
+        {
+          "text": "left",
+          "alignment": "left",
+          "style": "header_left"
+        },
+        {
+          "text": "center",
+          "alignment": "center",
+          "style": "header_center"
+        },
+        {
+          "text": "right",
+          "alignment": "right",
+          "style": "header_right"
+        }
+      ]
+    },
+    "content": [
+      {
+        "text": "Title",
+        "style": "title",
+        "alignment": "left"
+      },
+      {
+        "style": "fieldsTable",
+        "layout": "lightHorizontalLines",
+        "table": {
+          "widths": [
+            "*",
+            500
+          ],
+          "body": [
+            [
+              "Field",
+              "Value"
+            ],
+            [
+              "One",
+              "Two"
+            ],
+            [
+              "One",
+              "Two"
+            ]
+          ]
+        }
+      },
+      {
+        "text": "body",
+        "style": "body",
+        "alignment": "left"
+      },
+      {
+        "text": "Comments",
+        "style": "commentsTitle",
+        "alignment": "left"
+      },
+      {
+        "text": [],
+        "style": "commentBlock"
+      }
+    ],
+    "footer": {
+      "columns": [
+        {
+          "text": "left",
+          "alignment": "left",
+          "style": "footer_left"
+        },
+        {
+          "text": "center",
+          "alignment": "center",
+          "style": "footer_center"
+        },
+        {
+          "text": "right",
+          "alignment": "right",
+          "style": "footer_right"
+        }
+      ]
+    },
+    "styles": {
+      "header_left": {},
+      "header_center": {},
+      "header_right": {},
+      "title": {
+        "bold": true,
+        "fontsize": 20,
+        "marginBottom": 10,
+        "decoration": "underline"
+      },
+      "body": {
+        "marginBottom": 10
+      },
+      "fieldsTable": {
+        "marginBottom": 15
+      },
+      "footer_left": {},
+      "footer_center": {},
+      "footer_right": {},
+      "commentsTitle": {},
+      "commentAuthor": {
+        "bold": true
+      },
+      "commentText": {},
+      "commentBlock": {
+        "marginBottom": 10
+      }
+    }
+  },
+  "default_table_top": {}
+}

@@ -1,0 +1,19 @@
+{
+  "include": "Include",
+  "left": "Left",
+  "center": "Center",
+  "right": "Right",
+  "header": "Header",
+  "title": "Title",
+  "body": "Content",
+  "customFields": "Fields",
+  "comments": "Comments",
+  "bodyBeforeCustomFields": "Place content before fields",
+  "fieldsBeforeBody": "Place fields before content",
+  "cancel": "Cancel",
+  "download": "Download",
+  "print": "Print",
+  "field": "Field",
+  "value": "Value"
+}
+

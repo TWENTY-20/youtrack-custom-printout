@@ -1,0 +1,19 @@
+{
+  "include": "Hinzufügen",
+  "left": "Links",
+  "center": "Mitte",
+  "right": "Rechts",
+  "header": "Kopfzeile",
+  "title": "Titel",
+  "body": "Inhalt",
+  "customFields": "Felder",
+  "comments": "Kommentare",
+  "bodyBeforeCustomFields": "Inhalt vor Felder platzieren",
+  "fieldsBeforeBody": "Felder vor Inhalt platzieren",
+  "cancel": "Abbrechen",
+  "download": "Herunterladen",
+  "print": "Drucken",
+  "field": "Feld",
+  "value": "Wert"
+}
+
