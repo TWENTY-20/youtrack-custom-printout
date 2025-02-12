@@ -42,7 +42,36 @@ hr.solid {
     height: 590px;
     width: 100%;
 }
-.collapse-container{
-    height: 700px;
+
+.collapse-container {
+    height: 740px;
     overflow-y: auto;
+}
+
+.infoIcon {
+    color: var(--ring-icon-color);
+}
+
+.infoIcon:hover {
+    color: #d671b3;
+}
+
+.link {
+    cursor: pointer;
+    color: var(--ring-link-color);
+    text-underline-offset: 3px;
+}
+
+.link:hover {
+    color: #d671b3;
+    text-decoration: underline;
+}
+
+.link:active {
+    color: white;
+}
+
+.loader-force-size {
+    height: 740px !important;
+    width: 400px !important;
 }

@@ -5,15 +5,24 @@
   "right": "Right",
   "header": "Header",
   "title": "Title",
-  "body": "Content",
+  "body": "Description",
   "customFields": "Fields",
-  "comments": "Comments",
+  "comments": "Comments:",
+  "attachments": "Attachments",
+  "footer": "Page numbering",
   "bodyBeforeCustomFields": "Place content before fields",
   "fieldsBeforeBody": "Place fields before content",
   "cancel": "Cancel",
   "download": "Download",
   "print": "Print",
   "field": "Field",
-  "value": "Value"
+  "value": "Value",
+  "dialog_title": "What should the PDF contain?",
+  "customFieldsCheckTooltip": "The selection of individual fields can be customised in the ‘Fields’ tab",
+  "selectAll": "Select all",
+  "unselectAll": "Unselect all",
+  "pdfError": "Something went wrong. The pdf could not be created. \n Try it again without images.",
+  "noSVG": "SVG graphics cannot currently be transferred to the PDF file.",
+  "images": "Images"
 }
 

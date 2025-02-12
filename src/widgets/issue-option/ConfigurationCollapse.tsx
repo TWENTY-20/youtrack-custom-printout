@@ -8,7 +8,8 @@ import ChevronUpIcon from "@jetbrains/icons/chevron-20px-up";
 import Checkbox from "@jetbrains/ring-ui-built/components/checkbox/checkbox";
 import Input from "@jetbrains/ring-ui-built/components/input/input";
 import {Collapse, CustomField, PdfConfiguration, PdfSection} from "./types.ts";
-import {getCollapseValue, getIncludeConfiguration, getIncludeValue, getToggledCollapseValue} from "./util.ts";
+import {getCollapseValue, getToggledCollapseValue} from "./util.ts";
+import ClickableLink from "@jetbrains/ring-ui-built/components/link/clickableLink";
 
 export default function ConfigurationCollapse(
     {
@@ -65,17 +66,6 @@ export default function ConfigurationCollapse(
         observer.observe(contentRef.current);
     }, []);
 
-
-    /*
-        const fontsizeList = () => {
-            const list = [];
-            for (let i = 1; i < 50; i++) {
-                list.push({key: i, label: `${i}`})
-            }
-            return list;
-        }
-    */
-
     const getCollapsed = useCallback(() => {
         return getCollapseValue(section, collapse)
     }, [section, collapse])
@@ -85,16 +75,6 @@ export default function ConfigurationCollapse(
             setCollapse(getToggledCollapseValue(section, collapse))
         }, [section, collapse]
     )
-
-    const setInclude = useCallback((value: boolean) => {
-            setPdfConfiguration(getIncludeConfiguration(section, pdfConfiguration, value))
-        }, [section, pdfConfiguration]
-    )
-
-    const getInclude = useCallback((): boolean => {
-        return getIncludeValue(section, pdfConfiguration)
-    }, [section, pdfConfiguration])
-
 
     const style = useMemo(() => {
         const calculatedDuration = BASE_ANIMATION_DURATION + contentHeight.current * DURATION_FACTOR;
@@ -106,7 +86,18 @@ export default function ConfigurationCollapse(
         };
     }, [height, collapse]);
 
+    const setAllFields = useCallback((value: boolean) => { // todo
+        const fields = pdfConfiguration.customFields.map(f => {
+            f.included = value
+            return f
+        })
+        setPdfConfiguration({...pdfConfiguration, customFields: fields, include_customFields: value})
+    }, [pdfConfiguration])
 
+    function allFieldsOff(fields: CustomField[]) {
+        const r = fields.filter(f => f.included)
+        return r.length === 0;
+    }
 
 
     return (
@@ -134,35 +125,16 @@ export default function ConfigurationCollapse(
                 <div ref={contentRef} className="min-h-10 bg-[var(--ring-sidebar-background-color)] p-2 ">
                     {!getCollapsed() &&
                         <div className={"p-4"}>
-                            <Checkbox checked={getInclude()} labelClassName={'pb-4'} label={t('include')} onChange={() => setInclude(!getInclude())}/>
-                            {/*<ButtonToolbar>
-                                <Select className={'fontSelect'}/>
-                                <Select
-                                    className={'fontSizeSelect'}
-                                    data={fontsizeList()}
-                                    selected={fontsize}
-                                    onSelect={(item) => {
-                                        if (item) setFontsize(item)
-                                    }}
-                                />
-                                <ButtonGroup>
-                                    <Button>Bold</Button>
-                                    <Button>Underline</Button>
-                                    <Button>Italic</Button>
-                                </ButtonGroup>
-
-                            </ButtonToolbar>*/}
-
                             {section === PdfSection.HEADER &&
                                 <div className={'space-y-2'}>
                                     <Input className={'input-full-width'} label={t('left')} value={pdfConfiguration.header_left} onChange={(i) => {
-                                        setPdfConfiguration({...pdfConfiguration, header_left: i.target.value})
+                                        setPdfConfiguration({...pdfConfiguration, header_left: i.target.value, include_header: true})
                                     }}/>
                                     <Input className={'input-full-width'} label={t('center')} value={pdfConfiguration.header_center} onChange={(i) => {
-                                        setPdfConfiguration({...pdfConfiguration, header_center: i.target.value})
+                                        setPdfConfiguration({...pdfConfiguration, header_center: i.target.value, include_header: true})
                                     }}/>
                                     <Input className={'input-full-width'} label={t('right')} value={pdfConfiguration.header_right} onChange={(i) => {
-                                        setPdfConfiguration({...pdfConfiguration, header_right: i.target.value})
+                                        setPdfConfiguration({...pdfConfiguration, header_right: i.target.value, include_header: true})
                                     }}/>
                                 </div>
                             }
@@ -188,15 +160,14 @@ export default function ConfigurationCollapse(
 
                             {section === PdfSection.CUSTOM_FIELDS &&
                                 <div>
-                                    <Checkbox checked={!pdfConfiguration.bodyBeforeCustomFields} labelClassName={'pb-4'} label={t('fieldsBeforeBody')}
-                                              onChange={() => setPdfConfiguration({...pdfConfiguration, bodyBeforeCustomFields: !pdfConfiguration.bodyBeforeCustomFields})}/>
+                                    <ClickableLink className={'link me-2'} onClick={() => setAllFields(true)}>{t('selectAll')}</ClickableLink>
+                                    <ClickableLink className={'link'} onClick={() => setAllFields(false)}>{t('unselectAll')}</ClickableLink>
                                     <hr className={'solid'}/>
-                                    {/*Select all button */}
                                     {pdfConfiguration.customFields.map((customField: CustomField, index: number) =>
                                         <Checkbox key={index} checked={customField.included} labelClassName={'pb-4 pr-4'} label={customField.name} onChange={() => {
                                             const fields = pdfConfiguration.customFields
                                             fields[index].included = !customField.included
-                                            setPdfConfiguration({...pdfConfiguration, customFields: fields})
+                                            setPdfConfiguration({...pdfConfiguration, customFields: fields, include_customFields: !allFieldsOff(fields)})
                                         }}/>
                                     )}
                                 </div>

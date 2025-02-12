@@ -1,5 +1,5 @@
-# YouTrack App Starter
-Once installed into [JetBrains YouTrack](https://www.jetbrains.com/youtrack/), this App provides a Drawio-Editor for editing diagrams.
+# YouTrack Custom Printout
+Once installed into [JetBrains YouTrack](https://www.jetbrains.com/youtrack/), this App provides a multiple opportunities to customize a printable pdf of an issue.
 
 ### Installation
 

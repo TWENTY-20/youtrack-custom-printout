@@ -14,8 +14,8 @@
       "indexPath": "issue-option/index.html",
       "extensionPoint": "ISSUE_OPTIONS_MENU_ITEM",
       "expectedDimensions": {
-        "width": "900",
-        "height": "760"
+        "width": "450",
+        "height": "800"
       }
     }
   ]

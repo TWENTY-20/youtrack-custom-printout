@@ -3,17 +3,17 @@
     "header": {
       "columns": [
         {
-          "text": "left",
+          "text": "",
           "alignment": "left",
           "style": "header_left"
         },
         {
-          "text": "center",
+          "text": "",
           "alignment": "center",
           "style": "header_center"
         },
         {
-          "text": "right",
+          "text": "",
           "alignment": "right",
           "style": "header_right"
         }
@@ -21,7 +21,7 @@
     },
     "content": [
       {
-        "text": "Title",
+        "text": "",
         "style": "title",
         "alignment": "left"
       },
@@ -30,32 +30,19 @@
         "layout": "lightHorizontalLines",
         "table": {
           "widths": [
-            "*",
-            500
+            150,
+            350
           ],
-          "body": [
-            [
-              "Field",
-              "Value"
-            ],
-            [
-              "One",
-              "Two"
-            ],
-            [
-              "One",
-              "Two"
-            ]
-          ]
+          "body": []
         }
       },
       {
-        "text": "body",
+        "text": "",
         "style": "body",
         "alignment": "left"
       },
       {
-        "text": "Comments",
+        "text": "",
         "style": "commentsTitle",
         "alignment": "left"
       },
@@ -67,29 +54,31 @@
     "footer": {
       "columns": [
         {
-          "text": "left",
-          "alignment": "left",
-          "style": "footer_left"
-        },
-        {
-          "text": "center",
+          "text": "",
           "alignment": "center",
           "style": "footer_center"
-        },
-        {
-          "text": "right",
-          "alignment": "right",
-          "style": "footer_right"
         }
       ]
     },
+    "images": {},
     "styles": {
-      "header_left": {},
-      "header_center": {},
-      "header_right": {},
+      "header_left": {
+        "fontSize": 8,
+        "marginTop": 5,
+        "marginLeft": 5
+      },
+      "header_center": {
+        "fontSize": 8,
+        "marginTop": 5
+      },
+      "header_right": {
+        "fontSize": 8,
+        "marginTop": 5,
+        "marginRight": 5
+      },
       "title": {
         "bold": true,
-        "fontsize": 20,
+        "fontSize": 25,
         "marginBottom": 10,
         "decoration": "underline"
       },
@@ -102,13 +91,28 @@
       "footer_left": {},
       "footer_center": {},
       "footer_right": {},
-      "commentsTitle": {},
-      "commentAuthor": {
-        "bold": true
+      "commentsTitle": {
+        "marginBottom": 5,
+        "fontSize": 18,
+        "decoration": "underline"
       },
-      "commentText": {},
+      "commentAuthor": {
+        "bold": true,
+        "color": "#d671b3",
+        "decoration": "underline"
+      },
+      "commentText": {
+      },
       "commentBlock": {
         "marginBottom": 10
+      },
+      "html-code": {
+        "background": "silver"
+      },
+      "textFieldHeading": {
+        "fontSize": 18,
+        "marginBottom": 5,
+        "decoration": "underline"
       }
     }
   },

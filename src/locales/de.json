@@ -5,15 +5,24 @@
   "right": "Rechts",
   "header": "Kopfzeile",
   "title": "Titel",
-  "body": "Inhalt",
+  "body": "Beschreibung",
   "customFields": "Felder",
-  "comments": "Kommentare",
+  "comments": "Kommentare:",
+  "attachments": "Anhänge",
+  "footer": "Seitennummerierung",
   "bodyBeforeCustomFields": "Inhalt vor Felder platzieren",
   "fieldsBeforeBody": "Felder vor Inhalt platzieren",
   "cancel": "Abbrechen",
   "download": "Herunterladen",
   "print": "Drucken",
   "field": "Feld",
-  "value": "Wert"
+  "value": "Wert",
+  "dialog_title": "Was soll die PDF beinhalten?",
+  "customFieldsCheckTooltip": "Die Auswahl einzelner Felder kann in dem Tab 'Felder' angepasst werden",
+  "selectAll": "Alle auswählen",
+  "unselectAll": "Alle abwählen",
+  "pdfError": "Da ist etwas schief gelaufen. Die PDF konnte nicht erstellt werden. \n Probier es ohne Bilder.",
+  "noSVG": "SVG Grafiken können aktuell nicht in die PDF-Datei übertragen werden.",
+  "images": "Bilder"
 }
 

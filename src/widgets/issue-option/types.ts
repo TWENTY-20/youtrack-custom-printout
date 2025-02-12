@@ -91,6 +91,7 @@ export interface PdfConfiguration {
     include_customFields: boolean,
     include_comments: boolean,
     include_footer: boolean,
+    include_attachments: boolean,
     header_left: string
     header_center: string
     header_right: string
@@ -136,19 +137,29 @@ export interface Project {
 export interface Attachment {
     id: string,
     name: string,
-    base64Content: string
+    base64Content: string,
+    mimeType: string,
+    url: string
 }
 
 export interface CustomField {
+    $type: string
     id: string,
     name: string,
-    value: CustomFieldValue | CustomFieldValue[],
+    value: CustomFieldValue | CustomFieldValue[] | number | string | PeriodFieldValue | TextFieldValue,
     included: boolean,
-
 }
 
 export interface CustomFieldValue {
     name: string
+}
+
+export interface PeriodFieldValue {
+    presentation: string
+}
+
+export interface TextFieldValue {
+    text: string
 }
 
 export interface IssueComment {
@@ -195,3 +206,34 @@ export interface CommentList extends Section {
 export interface CommentSection {
     text: TextSection[]
 }
+
+export interface BrokenTableSection {
+    nodeName: string
+    marginBottom: number
+    style: string[]
+    table: Table
+}
+
+export interface BrokenTable {
+    body: Body[][]
+}
+
+export interface BrokenBody {
+    text: string
+    nodeName: string
+    bold?: boolean
+    fillColor?: string
+    style: string[]
+}
+
+export interface DocNode {
+    nodeName: string,
+    text?: string | DocNode[],
+    stack?: DocNode[]
+    image?: string
+    width?: number
+    link?: string
+    margin?: number | number[]
+}
+
+
