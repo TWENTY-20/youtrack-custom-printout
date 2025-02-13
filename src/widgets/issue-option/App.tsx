@@ -16,14 +16,17 @@ import Info from "@jetbrains/icons/info";
 import {AlertType} from "@jetbrains/ring-ui-built/components/alert/alert";
 import Island, {Content} from "@jetbrains/ring-ui-built/components/island/island";
 import LoaderScreen from "@jetbrains/ring-ui-built/components/loader-screen/loader-screen";
+import {formatDistanceToNow} from "date-fns";
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call
 (pdfMake as any).addVirtualFileSystem(pdfFonts);
+import {de} from 'date-fns/locale/de'
+import {enUS} from 'date-fns/locale/en-US'
 
 export default function App() {
 
     const {t} = useTranslation();
     const [pdfConfiguration, setPdfConfiguration] = useState<PdfConfiguration>({
-        include_header: false,
+        include_header: true,
         include_title: true,
         include_body: true,
         include_customFields: true,
@@ -39,13 +42,15 @@ export default function App() {
         attachments: [],
         customFields: [],
         bodyBeforeCustomFields: true,
+        idReadable: undefined,
+        issueUrl: undefined
     })
 
     const [collapse, setCollapse] = useState({
-        header: false,
+        header: true,
         title: true,
         body: true,
-        customFields: true,
+        customFields: false,
         comments: true,
         footer: true
     })
@@ -53,9 +58,27 @@ export default function App() {
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        void host.fetchYouTrack(`issues/${YTApp.entity.id}?fields=id,description,summary,attachments(id,name,base64Content,mimeType),customFields(id,name,value(name,presentation,text)),project(id,name),comments(id,text,author(fullName))`).then((issue: Issue) => {
+        setLoading(true)
+        const lang = YTApp.locale === 'de' ? 'de-DE' : 'en-US'
+        const locale = YTApp.locale === 'de' ? de : enUS
+        const baseUrl = new URL(YTApp.me.avatarUrl).origin
+        void host.fetchYouTrack(`issues/${YTApp.entity.id}?fields=id,idReadable,description,summary,reporter(fullName),updater(fullName),created,updated,attachments(id,name,base64Content,mimeType),customFields(id,name,value(name,presentation,text)),project(id,name),comments(id,text,created,author(fullName))`).then((issue: Issue) => {
+            const issueUrl = baseUrl + '/issue/' + issue.idReadable
             issue.customFields.map((cf) => cf.included = true)
-            setPdfConfiguration({...pdfConfiguration, title: issue.summary, body: issue.description, comments: issue.comments, attachments: issue.attachments, customFields: issue.customFields});
+            setPdfConfiguration({
+                ...pdfConfiguration,
+                title: issue.summary,
+                body: issue.description,
+                comments: issue.comments,
+                attachments: issue.attachments,
+                customFields: issue.customFields,
+                idReadable: issue.idReadable,
+                issueUrl: issueUrl,
+                header_left: `${t('createdBy')} ${issue.reporter.fullName} ${t('vor')}${formatDistanceToNow(new Date(issue.created), {locale: locale})} ${t('ago')}`,
+                header_center: `${t('updatedBy')} ${issue.updater.fullName} ${t('vor')}${formatDistanceToNow(new Date(issue.updated), {locale: locale})} ${t('ago')}`,
+                header_right: new Date().toLocaleString(lang, {year: 'numeric', month: 'long', day: 'numeric'} as Intl.DateTimeFormatOptions),
+            });
+            setLoading(false)
         })
     }, []);
 
@@ -94,7 +117,7 @@ export default function App() {
             }, 5000)
             generate().print({
                 progressCallback: (p) => {
-                    if (p === 1){
+                    if (p === 1) {
                         window.clearTimeout(timeout)
                         setLoading(false);
                     }
@@ -121,13 +144,13 @@ export default function App() {
         schema.footer = applyFooter(pdfConfiguration.include_footer)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        reworkDoc(schema.content)
+        schema.content = reworkDoc(schema.content)
         console.log(schema.content)
         return schema
     }
 
     function filename(name: string) {
-        return name.replace(/[ /]/, '_')
+        return name.replace(/[ /]/g, '_')
     }
 
     return (
@@ -139,7 +162,7 @@ export default function App() {
                     </div>
                     :
                     <div className={'flex flex-col justify-between p-2 collapse-container'}>
-                        <div className={'space-y-2'}>
+                        <div className={'space-y-2 pb-2'}>
                             <p className={'text-2xl'}>{t('dialog_title')}</p>
                             <hr className={'solid'}/>
                             <div className={'grid grid-cols-2'}>

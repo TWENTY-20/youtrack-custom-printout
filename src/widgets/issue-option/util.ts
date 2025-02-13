@@ -62,10 +62,19 @@ function applyHeaders(headers: TextSection[], pdfConfig: PdfConfiguration): Text
 
 function applyContents(contents: Section[], pdfConfiguration: PdfConfiguration, t: (s: string) => string) {
     const textFieldName = 'TextIssueCustomField'
+
+
     return contents.map((section) => {
         switch (section.style) {
-            case "title":
-                return {...section, text: pdfConfiguration.include_title ? pdfConfiguration.title : ''}
+            case "title": {
+                const title = pdfConfiguration.issueUrl && pdfConfiguration.idReadable ? [{
+                    text: pdfConfiguration.idReadable + ':',
+                    link: pdfConfiguration.issueUrl,
+                    decoration: "underline",
+                    color: '#d671b3',
+                }, ' ' + pdfConfiguration.title] : [pdfConfiguration.title]
+                return {...section, text: pdfConfiguration.include_title ? title : ''}
+            }
             case "fieldsTable": {
                 if (!pdfConfiguration.include_customFields) return {...section, table: {body: [[]]}}
                 const fields = pdfConfiguration.customFields.filter(f => f.included && f.$type !== textFieldName).map((field) => {
@@ -87,7 +96,7 @@ function applyContents(contents: Section[], pdfConfiguration: PdfConfiguration, 
             }
             case "body": {
                 const content = pdfConfiguration.include_body ? processMarkdown(pdfConfiguration.body, !pdfConfiguration.include_attachments) : []
-                const extraFields = parseCustomTextFields(pdfConfiguration.customFields)
+                const extraFields = pdfConfiguration.include_body ? parseCustomTextFields(pdfConfiguration.customFields, !pdfConfiguration.include_attachments) : []
                 return {...section, stack: [...content, ...extraFields]}
             }
             case "commentsTitle": {
@@ -103,12 +112,12 @@ function applyContents(contents: Section[], pdfConfiguration: PdfConfiguration, 
     })
 }
 
-function parseCustomTextFields(customFields: CustomField[]) {
+function parseCustomTextFields(customFields: CustomField[], removeImages: boolean = false) {
     let result: object[] = []
     const textFields = customFields.filter(f => f.$type === 'TextIssueCustomField' && f.included)
     for (const field of textFields) {
         if (field.value) {
-            const rendered = processMarkdown((field.value as TextFieldValue).text, false)
+            const rendered = processMarkdown((field.value as TextFieldValue).text, removeImages)
             const heading = h2(field.name)
             result = [...result, heading, ...rendered]
         }
@@ -166,19 +175,32 @@ function extractValueAsString(cf: CustomField) {
 }
 
 function comment(comment: IssueComment, removeImages: boolean) {
+    const dateTimeOptions = {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'} as Intl.DateTimeFormatOptions;
+    const lang = YTApp.locale === 'de' ? 'de-DE' : 'en-US'
+    const date = comment.created ? new Date(comment.created).toLocaleString(lang, dateTimeOptions) : ""
     return {
-        stack: [
-            {
-                text: comment.author.fullName + "\n",
-                style: "commentAuthor",
-                alignment: "left",
-            },
-            {
-                stack: processMarkdown(comment.text, removeImages),
-                style: "commentText",
-                alignment: "left",
-            }
-        ],
+        nodeName: "COMMENT",
+        style: 'commentBox',
+        table: {
+            widths: [500],
+            body: [
+                [{
+                    stack: [
+                        {
+                            text: [{text: comment.author.fullName, style: "commentAuthor"}, {text: "   " + date + "\n", style: "commentDate"}],
+                            alignment: "left",
+                            marginBottom: 4,
+                        },
+                        {
+                            stack: reworkDoc(processMarkdown(comment.text, removeImages)),
+                            style: "commentText",
+                            alignment: "left",
+                        }
+                    ],
+
+                }],
+            ]
+        },
         marginBottom: 10
     }
 }
@@ -202,67 +224,76 @@ function applyImages(attachments: Attachment[]): object {
 }
 
 function reworkDoc(content: DocNode[]) {
-    content.forEach((node: DocNode) => {
-        if (node.nodeName === "IMG") {
-            node.image = node.image?.replace('.', '')
-        }
-        if (node.margin) {
-            if (Array.isArray(node.margin)) {
-                if (node.margin.length === 4) {
-                    node.margin[1] = 0
-                    node.margin[3] = 0
-                }
-            }
-        }
-        checkRecursive(node) // For some reason, node will resolved as array instead of an object containing an array (like expected)
+    return content.map((node: DocNode) => {
+        return checkRecursive(node)
     })
 }
 
 function checkRecursive(node: DocNode) {
     if (Array.isArray(node)) {
-        checkImage(node)
-        checkRecursive(node)
+        (node as DocNode[]).forEach(checkRecursive)
     } else {
-        if (node.stack) {
-            checkImage(node.stack)
-            checkMargin(node.stack)
-        }
+        node = checkImage(node)
+        node = checkMargin(node)
+        node = checkCodeParent(node)
+        node = checkCode(node)
+
+        if (node.stack) node.stack = node.stack.map(checkRecursive)  // ggf. mit map zuweisen
         if (node.text) {
-            if (Array.isArray(node.text)) {
-                checkMargin(node.text)
+            if (Array.isArray(node.text)) node.text = node.text.map(checkRecursive)
+        }
+    }
+    return node;
+}
+
+function checkImage(n: DocNode) {
+    if (n.nodeName === "IMG") {
+        n.image = n.image?.replace('.', '')
+        n.width = 300
+    }
+    return n
+}
+
+function checkMargin(n: DocNode) {
+    if (n.margin) {
+        if (Array.isArray(n.margin)) {
+            if (n.margin.length === 4) {
+                n.margin[1] = 0
+                n.margin[3] = 0
             }
+        }
+    }
+    return n
+}
+
+function checkCodeParent(n: DocNode): DocNode {
+    if (n.nodeName === "PRE") {
+        if (Array.isArray(n.text)) {
+            n.stack = n.text
+            n.text = []
+        }
+    }
+    return n
+}
+
+function checkCode(n: DocNode) {
+    if (n.nodeName === "CODE") {
+        if (typeof n.text === 'string') return codeBox(n.text)
+    }
+    return n
+}
+
+function codeBox(text: string): DocNode {
+    return {
+        nodeName: "CODE",
+        style: 'codeBox',
+        table: {
+            body: [
+                [text],
+            ]
         }
     }
 }
 
-function checkImage(list: DocNode[]) {
-    list.forEach((n: DocNode) => {
-        if (n.nodeName === "IMG") {
-            n.image = n.image?.replace('.', '')
-            n.width = 300
-        }
-        checkRecursive(n)
-    })
-}
-
-function checkMargin(list: DocNode[]) {
-    list.forEach((n: DocNode) => {
-        if (n.margin) {
-            if (Array.isArray(n.margin)) {
-                if (n.margin.length === 4) {
-                    n.margin[1] = 0
-                    n.margin[3] = 0
-                }
-            }
-        }
-        checkRecursive(n)
-    })
-}
-
-/*function checkCode(list: DocNode[]) {
-    list.forEach((n: DocNode) => {
-
-    })
-}*/
 
 export {getCollapseValue, getToggledCollapseValue, applyHeaders, applyContents, applyFooter, applyImages, reworkDoc}

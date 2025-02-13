@@ -65,22 +65,24 @@
       "header_left": {
         "fontSize": 8,
         "marginTop": 5,
-        "marginLeft": 5
+        "marginLeft": 6,
+        "color": "#9EA0A8"
       },
       "header_center": {
         "fontSize": 8,
-        "marginTop": 5
+        "marginTop": 5,
+        "color": "#9EA0A8"
       },
       "header_right": {
         "fontSize": 8,
         "marginTop": 5,
-        "marginRight": 5
+        "marginRight": 6,
+        "color": "#9EA0A8"
       },
       "title": {
         "bold": true,
-        "fontSize": 25,
-        "marginBottom": 10,
-        "decoration": "underline"
+        "fontSize": 20,
+        "marginBottom": 10
       },
       "body": {
         "marginBottom": 10
@@ -102,6 +104,11 @@
         "decoration": "underline"
       },
       "commentText": {
+      },
+      "commentDate": {
+        "bold": false,
+        "color": "#9EA0A8",
+        "fontSize": 10
       },
       "commentBlock": {
         "marginBottom": 10

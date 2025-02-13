@@ -101,6 +101,8 @@ export interface PdfConfiguration {
     attachments: Attachment[]
     customFields: CustomField[]
     bodyBeforeCustomFields: boolean
+    idReadable: string | undefined
+    issueUrl: string | undefined
 }
 
 export interface Collapse {
@@ -113,11 +115,6 @@ export interface Collapse {
 
 }
 
-export interface SectionStyle {
-    fontSize: number,
-    underline: boolean,
-}
-
 export interface Issue {
     id: string,
     description: string,
@@ -126,7 +123,17 @@ export interface Issue {
     customFields: CustomField[],
     project: Project,
     comments: IssueComment[],
+    created: number,
+    updated: number,
+    reporter: User,
+    updater: User,
+    idReadable: string,
 
+
+}
+
+export interface User{
+    fullName : string
 }
 
 export interface Project {
@@ -165,7 +172,8 @@ export interface TextFieldValue {
 export interface IssueComment {
     id: string,
     text: string,
-    author: Author
+    author: Author,
+    created: number
 }
 
 export interface Author {
@@ -190,42 +198,6 @@ export interface TextSection extends Section {
     alignment: string
 }
 
-export interface TableSection extends Section {
-    table: Table,
-}
-
-export interface Table {
-    widths: number[],
-    body: string[][]
-}
-
-export interface CommentList extends Section {
-    text: CommentSection[]
-}
-
-export interface CommentSection {
-    text: TextSection[]
-}
-
-export interface BrokenTableSection {
-    nodeName: string
-    marginBottom: number
-    style: string[]
-    table: Table
-}
-
-export interface BrokenTable {
-    body: Body[][]
-}
-
-export interface BrokenBody {
-    text: string
-    nodeName: string
-    bold?: boolean
-    fillColor?: string
-    style: string[]
-}
-
 export interface DocNode {
     nodeName: string,
     text?: string | DocNode[],
@@ -233,7 +205,18 @@ export interface DocNode {
     image?: string
     width?: number
     link?: string
-    margin?: number | number[]
+    margin?: number | number[],
+    table?: TableNode,
+    style?: string
+
 }
 
+export interface TableNode {
+    body: string[][]
+    widths?: number[]
+}
+
+export interface SystemSettings{
+    baseUrl: string,
+}
 

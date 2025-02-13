@@ -86,12 +86,13 @@ export default function ConfigurationCollapse(
         };
     }, [height, collapse]);
 
-    const setAllFields = useCallback((value: boolean) => { // todo
+    const setAllFields = useCallback(() => {
+        const allUnselected = allFieldsOff(pdfConfiguration.customFields)
         const fields = pdfConfiguration.customFields.map(f => {
-            f.included = value
+            f.included = allUnselected
             return f
         })
-        setPdfConfiguration({...pdfConfiguration, customFields: fields, include_customFields: value})
+        setPdfConfiguration({...pdfConfiguration, customFields: fields, include_customFields: allUnselected})
     }, [pdfConfiguration])
 
     function allFieldsOff(fields: CustomField[]) {
@@ -160,8 +161,7 @@ export default function ConfigurationCollapse(
 
                             {section === PdfSection.CUSTOM_FIELDS &&
                                 <div>
-                                    <ClickableLink className={'link me-2'} onClick={() => setAllFields(true)}>{t('selectAll')}</ClickableLink>
-                                    <ClickableLink className={'link'} onClick={() => setAllFields(false)}>{t('unselectAll')}</ClickableLink>
+                                    <ClickableLink className={'link'} onClick={setAllFields}>{t(allFieldsOff(pdfConfiguration.customFields) ? 'selectAll' : 'unselectAll')}</ClickableLink>
                                     <hr className={'solid'}/>
                                     {pdfConfiguration.customFields.map((customField: CustomField, index: number) =>
                                         <Checkbox key={index} checked={customField.included} labelClassName={'pb-4 pr-4'} label={customField.name} onChange={() => {
@@ -171,10 +171,6 @@ export default function ConfigurationCollapse(
                                         }}/>
                                     )}
                                 </div>
-                            }
-
-                            {section === PdfSection.COMMENTS &&
-                                <div></div>
                             }
                         </div>
                     }
