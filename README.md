@@ -1,5 +1,19 @@
-# YouTrack Custom Printout
+# <img src="/src/logo.svg" alt="" width="35" /> YouTrack Custom Printout
 Once installed into [JetBrains YouTrack](https://www.jetbrains.com/youtrack/), this App provides a multiple opportunities to customize a printable pdf of an issue.
+
+---
+## twenty20 | YouTrack Apps and Extensions
+
+We specialize in developing custom YouTrack apps and extensions tailored specifically to your needs.
+
+With our expertise and close collaboration with **JetBrains**, we ensure seamless integration and functionality.
+
+👉 Visit our **[Website](https://twenty20.de/)** for more information and to explore our services.
+
+👉 Looking for other extensions?  
+Check out our offerings in the **[JetBrains Marketplace](https://plugins.jetbrains.com/vendor/twenty20)**.
+
+---
 
 ### Installation
 
