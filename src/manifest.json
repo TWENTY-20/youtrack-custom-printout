@@ -10,7 +10,7 @@
   "widgets": [
     {
       "key": "custom-printout",
-      "name": "Customize Printout",
+      "name": "Custom Printout",
       "indexPath": "issue-option/index.html",
       "extensionPoint": "ISSUE_OPTIONS_MENU_ITEM",
       "expectedDimensions": {
