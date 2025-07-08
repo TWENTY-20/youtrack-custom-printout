@@ -5,7 +5,7 @@
   "description": "Print an issue as PDF and customize the Layout",
   "changeNotes": "See https://github.com/TWENTY-20/youtrack-custom-printout/releases",
   "version": "1.0.2",
-  "icon": "logo.svg",
+  "icon": "logo.png",
   "minYouTrackVersion": "2024.3.0",
   "widgets": [
     {

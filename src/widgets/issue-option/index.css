@@ -8,7 +8,6 @@
 
 
 body.plugin {
-    padding: 0 16px;
     background-color: var(--ring-content-background-color);
     color: var(--ring-text-color);
     font-size: var(--ring-font-size);
@@ -74,4 +73,16 @@ hr.solid {
 .loader-force-size {
     height: 740px !important;
     width: 400px !important;
+}
+
+.forceDisableFloat h2 {
+    float: none !important;
+}
+
+.w-95 {
+    width: 95% !important;
+}
+
+.island-header-padding {
+    padding: var(--ring-unit) calc(var(--ring-unit) * 2) !important;
 }
