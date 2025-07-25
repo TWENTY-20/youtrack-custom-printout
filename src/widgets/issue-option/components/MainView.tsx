@@ -48,7 +48,7 @@ export default function MainView() {
                 <Island style={{border: '1px solid #d671b3'}}>
                     <Content>{t('noSVG')}</Content>
                 </Island>
-                <div className={'flex flex-row justify-end space-x-2 pt-10 pb-8'}>
+                <div className={'flex flex-row justify-end gap-x-2 pt-10 pb-8'}>
                     <Button primary height={ControlsHeight.S} onClick={() => downloadPdf(config)}>{t('download')}</Button>
                     <Button primary height={ControlsHeight.S} onClick={() => printPdf(config)}>{t('print')}</Button>
                 </div>
