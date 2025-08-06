@@ -1,4 +1,4 @@
-# <img src="/src/logo.svg" alt="" width="35" /> YouTrack Custom Printout
+# <img src="/src/logo.png" alt="" width="35" /> YouTrack Custom Printout
 Once installed into [JetBrains YouTrack](https://www.jetbrains.com/youtrack/), this App provides a multiple opportunities to customize a printable pdf of an issue.
 
 ---
