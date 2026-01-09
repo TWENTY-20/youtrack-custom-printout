@@ -2,10 +2,10 @@ import SectionCollapse from "../SectionCollapse.tsx";
 import {PdfSection} from "../../entities/pdf.ts";
 import {useTranslation} from "react-i18next";
 import {usePdfContext} from "../../context/PdfContextProvider.tsx";
-import ClickableLink from "@jetbrains/ring-ui-built/components/link/clickableLink";
 import {CustomField} from "../../entities/youtrack.ts";
 import Checkbox from "@jetbrains/ring-ui-built/components/checkbox/checkbox";
 import {useCallback} from "react";
+import ClickableLink from "@jetbrains/ring-ui-built/components/link/clickable-link";
 
 export default function CustomFieldsSection() {
 

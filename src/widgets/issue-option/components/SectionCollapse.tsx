@@ -8,10 +8,10 @@ import Toggle from "@jetbrains/ring-ui-built/components/toggle/toggle";
 import Island, {Content, Header} from "@jetbrains/ring-ui-built/components/island/island";
 import {useCollapse} from "../context/CollapseContextProvider.tsx";
 import {useToggle} from "../context/PdfContextProvider.tsx";
-import IconSVG from "@jetbrains/ring-ui-built/components/icon/icon__svg";
 import ChevronDownIcon from "@jetbrains/icons/chevron-down";
 import ChevronRightIcon from "@jetbrains/icons/chevron-right";
 import {useTranslation} from "react-i18next";
+import Icon from "@jetbrains/ring-ui-built/components/icon";
 
 
 export default function SectionCollapse({children, section}: { children?: ReactNode, section: PdfSection }) {
@@ -28,7 +28,7 @@ export default function SectionCollapse({children, section}: { children?: ReactN
                             <div>
                                 {
                                     children &&
-                                    (collapsed ? <IconSVG src={ChevronRightIcon}/> : <IconSVG src={ChevronDownIcon}/>)
+                                    (collapsed ? <Icon glyph={ChevronRightIcon}/> : <Icon glyph={ChevronDownIcon}/>)
                                 }
                                 <Text className={'ps-2'}>{t(section.valueOf())}</Text>
 
