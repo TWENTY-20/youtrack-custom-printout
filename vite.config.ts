@@ -34,10 +34,10 @@ export default defineConfig(({mode}) => {
             tailwindcss(),
             viteStaticCopy({
                 targets: [
-                    { src: "./logo.svg", dest: "." },
-                    { src: "./manifest.json", dest: "." },
-                    { src: "./entity-extensions.json", dest: "." },
-                    { src: "./settings.json", dest: "." },
+                    {src: "./logo.svg", dest: "."},
+                    {src: "./manifest.json", dest: "."},
+                    {src: "./entity-extensions.json", dest: "."},
+                    {src: "./settings.json", dest: "."},
                 ]
             })
         ],
@@ -56,11 +56,6 @@ export default defineConfig(({mode}) => {
                     // List every widget entry point here
                     fullPage: 'src/widgets/issue-option/index.html',
                 }
-            }
-        },
-        esbuild: {
-            supported: {
-                "top-level-await": true
             }
         },
     };
