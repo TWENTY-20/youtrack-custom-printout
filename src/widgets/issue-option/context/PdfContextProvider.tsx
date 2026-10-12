@@ -35,13 +35,14 @@ export default function PdfContextProvider({children}: { children: ReactNode }) 
     const [config, setConfig] = useState<PdfConfiguration>(DEFAULT_PDF_CONFIG)
 
     return (
-        <PdfContext.Provider value={{config, setConfig}}>
+        <PdfContext value={{config, setConfig}}>
             {children}
-        </PdfContext.Provider>
+        </PdfContext>
     )
 }
 
 export function usePdfContext() {
+    // eslint-disable-next-line @eslint-react/no-use-context
     const context = useContext(PdfContext)
     if (!context) {
         throw new Error('usePdfContext must be used within a PdfContextProvider')
@@ -66,5 +67,7 @@ export function useToggle(section: PdfSection) {
             return {value: config.include_footer, toggle: () => setConfig({...config, include_footer: !config.include_footer})}
         case PdfSection.ATTACHMENTS:
             return {value: config.include_attachments, toggle: () => setConfig({...config, include_attachments: !config.include_attachments})}
+        default:
+            throw new Error('Unknown section')
     }
 }

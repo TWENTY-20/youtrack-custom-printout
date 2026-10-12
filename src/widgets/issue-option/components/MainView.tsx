@@ -25,9 +25,10 @@ export default function MainView() {
     const {printPdf, downloadPdf, loading} = usePdfActions()
 
     useEffect(() => {
-        void fetchIssue(YTApp.entity.id).then((issue: Issue) => {
+        fetchIssue(YTApp.entity.id).then((issue: Issue) => {
             setConfig(parseIssue(issue, config, t));
-        })
+        }).catch(console.error)
+        // eslint-disable-next-line @eslint-react/exhaustive-deps
     }, []);
 
     if (loading) return <LoaderScreen containerClassName={'w-95'}/>

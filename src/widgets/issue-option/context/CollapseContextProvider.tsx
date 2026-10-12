@@ -31,13 +31,14 @@ export default function CollapseContextProvider({children}: { children: ReactNod
     }, [setCollapsed, collapsed])
 
     return (
-        <CollapseContext.Provider value={{collapsed, toggleCollapse}}>
+        <CollapseContext value={{collapsed, toggleCollapse}}>
             {children}
-        </CollapseContext.Provider>
+        </CollapseContext>
     )
 }
 
 export function useCollapseContext() {
+    // eslint-disable-next-line @eslint-react/no-use-context
     const context = useContext(CollapseContext)
     if (!context) {
         throw new Error('useCollapseContext must be used within a CollapseContextProvider')
@@ -62,7 +63,7 @@ export function useCollapse(section: PdfSection) {
             return {collapsed: collapsed.footer, toggleCollapse: () => toggleCollapse(PdfSection.FOOTER)}
         case PdfSection.ATTACHMENTS:
             return {collapsed: collapsed.attachments, toggleCollapse: () => toggleCollapse(PdfSection.ATTACHMENTS)}
-
-
+        default:
+            throw new Error('Unknown section')
     }
 }

@@ -2,7 +2,6 @@ import {IssueComment} from "../../entities/youtrack.ts";
 import YTApp from "../../youTrackApp.ts";
 import {DocNode} from "../../entities/pdf.ts";
 import {processMarkdown} from "../MarkdownParser.ts";
-import {reworkDoc} from "./check.ts";
 
 export function h2(name: string) {
     return {
@@ -30,7 +29,7 @@ export function comment(comment: IssueComment, removeImages: boolean) {
                             marginBottom: 4,
                         },
                         {
-                            stack: reworkDoc(processMarkdown(comment.text, removeImages)),
+                            stack: processMarkdown(comment.text, removeImages),
                             style: "commentText",
                             alignment: "left",
                         }

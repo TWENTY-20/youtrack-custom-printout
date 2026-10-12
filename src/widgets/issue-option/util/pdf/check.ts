@@ -1,35 +1,50 @@
 import {DocNode} from "../../entities/pdf.ts";
 import {codeBox} from "./components.ts";
+import {imageKey} from "./images.ts";
 
-function reworkDoc(content: DocNode[]) {
+function reworkDoc(content: DocNode[], imageKeys: Set<string>) {
     return content.map((node: DocNode) => {
-        return checkRecursive(node)
+        return checkRecursive(node, imageKeys)
     })
 }
 
-function checkRecursive(node: DocNode) {
-    if (Array.isArray(node)) {
-        (node as DocNode[]).forEach(checkRecursive)
+function checkRecursive(node: DocNode, imageKeys: Set<string>) {
+    let docNode = node
+    if (Array.isArray(docNode)) {
+        const children = docNode as DocNode[]
+        children.forEach((child, i) => {
+            children[i] = checkRecursive(child, imageKeys)
+        })
     } else {
-        node = checkImage(node)
-        node = checkMargin(node)
-        node = checkCodeParent(node)
-        node = checkCode(node)
+        docNode = checkImage(docNode, imageKeys)
+        docNode = checkMargin(docNode)
+        docNode = checkCodeParent(docNode)
+        docNode = checkCode(docNode)
 
-        if (node.stack) node.stack = node.stack.map(checkRecursive)  // ggf. mit map zuweisen
-        if (node.text) {
-            if (Array.isArray(node.text)) node.text = node.text.map(checkRecursive)
+        if (docNode.stack) docNode.stack = docNode.stack.map(n => checkRecursive(n, imageKeys))  // ggf. mit map zuweisen
+        if (docNode.text) {
+            if (Array.isArray(docNode.text)) docNode.text = docNode.text.map(n => checkRecursive(n, imageKeys))
         }
+        if (docNode.ol) docNode.ol = docNode.ol.map(n => checkRecursive(n, imageKeys))
+        if (docNode.ul) docNode.ul = docNode.ul.map(n => checkRecursive(n, imageKeys))
+        if (docNode.table) docNode.table.body = docNode.table.body.map(row => row.map(cell => typeof cell === 'string' ? cell : checkRecursive(cell, imageKeys)))
     }
-    return node;
+    return docNode;
 }
 
-function checkImage(n: DocNode) {
+function checkImage(n: DocNode, imageKeys: Set<string>): DocNode {
     if (n.nodeName === "IMG") {
-        n.image = n.image?.replace('.', '')
+        const key = n.image ? imageKey(n.image) : undefined
+        // unknown images would make pdfmake try to load them as url and fail, so a placeholder is shown instead
+        if (!key || !imageKeys.has(key)) return imagePlaceholder(n.image)
+        n.image = key
         n.width = 300
     }
     return n
+}
+
+function imagePlaceholder(fileName: string | undefined): DocNode {
+    return {nodeName: "IMG_PLACEHOLDER", text: `[${fileName ?? 'image'}]`, italics: true, color: '#9EA0A8'}
 }
 
 function checkMargin(n: DocNode) {

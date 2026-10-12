@@ -21,7 +21,9 @@ export function parseIssue(issue: Issue, config: PdfConfiguration, t: (s: string
     const locale = YTApp.locale === 'de' ? de : enUS
     const baseUrl = new URL(YTApp.me.avatarUrl).origin
     const issueUrl = baseUrl + '/issue/' + issue.idReadable
-    issue.customFields.map((cf) => cf.included = true)
+    issue.customFields.forEach((cf) => {
+        cf.included = true
+    })
     return {
         ...config,
         title: issue.summary,

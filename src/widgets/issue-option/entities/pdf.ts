@@ -21,16 +21,19 @@ export interface DocNode {
     nodeName: string,
     text?: string | DocNode[],
     stack?: DocNode[]
+    ol?: DocNode[]
+    ul?: DocNode[]
     image?: string
     width?: number
     link?: string
     margin?: number | number[],
     table?: TableNode,
     style?: string
-
+    italics?: boolean
+    color?: string
 }
 
 export interface TableNode {
-    body: string[][]
+    body: (string | DocNode)[][]
     widths?: number[]
 }

@@ -18,6 +18,7 @@ export default function SectionCollapse({children, section}: { children?: ReactN
     const {collapsed, toggleCollapse} = useCollapse(section)
     const {value, toggle} = useToggle(section)
     const {t} = useTranslation()
+    const hasChildren = Boolean(children)
 
     return (
         <Collapse collapsed={collapsed} onChange={toggleCollapse}>
@@ -27,7 +28,7 @@ export default function SectionCollapse({children, section}: { children?: ReactN
                         <div className="flex flex-row justify-between w-full">
                             <div>
                                 {
-                                    children &&
+                                    hasChildren &&
                                     (collapsed ? <Icon glyph={ChevronRightIcon}/> : <Icon glyph={ChevronDownIcon}/>)
                                 }
                                 <Text className={'ps-2'}>{t(section.valueOf())}</Text>
@@ -37,7 +38,7 @@ export default function SectionCollapse({children, section}: { children?: ReactN
                         </div>
                     </Header>
                 </CollapseControl>
-                {children &&
+                {hasChildren &&
                     <CollapseContent>
                         <Content>
                             {children}

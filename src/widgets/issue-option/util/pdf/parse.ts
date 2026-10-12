@@ -3,7 +3,7 @@ import {processMarkdown} from "../MarkdownParser.ts";
 import YTApp from "../../youTrackApp.ts";
 import {h2} from "./components.ts";
 
-export function parseCustomTextFields(customFields: CustomField[], removeImages: boolean = false) {
+export function parseCustomTextFields(customFields: CustomField[], removeImages = false) {
     let result: object[] = []
     const textFields = customFields.filter(f => f.$type === 'TextIssueCustomField' && f.included)
     for (const field of textFields) {
@@ -17,8 +17,6 @@ export function parseCustomTextFields(customFields: CustomField[], removeImages:
 }
 
 export function extractValueAsString(cf: CustomField) {
-    const single = /^Single/;
-    const multi = /^Multi/;
     const simple = 'SimpleIssueCustomField'
     const period = 'PeriodIssueCustomField'
     const date = 'DateIssueCustomField'
@@ -28,9 +26,9 @@ export function extractValueAsString(cf: CustomField) {
     const dateTimeOptions = {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'} as Intl.DateTimeFormatOptions;
 
 
-    if (single.test(cf.$type) || cf.$type === state) {
+    if (cf.$type.startsWith("Single") || cf.$type === state) {
         return (cf.value as CustomFieldValue).name
-    } else if (multi.test(cf.$type)) {
+    } else if (cf.$type.startsWith("Multi")) {
         if ((cf.value as CustomFieldValue[]).length === 0) return "?"
         return (cf.value as CustomFieldValue[]).map(v => v.name).join(', ')
     } else if (cf.$type === simple) {

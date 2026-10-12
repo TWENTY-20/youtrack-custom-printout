@@ -4,7 +4,7 @@ import {RequestParams} from "@jetbrains/ring-ui-built/components/http/http";
 import {ReactNode} from "react";
 
 export interface HttpHandler {
-    endpoints: Array<Endpoint>;
+    endpoints: Endpoint[];
 }
 
 export type Scope = "issue" | "project" | "article" | "user" | "global";
@@ -26,27 +26,27 @@ export type ContextForScope<scope extends Scope> =
     scope extends "issue" ? { issue: any } :
         scope extends "project" ? { project: any } :
             scope extends "article" ? { article: any } :
-                scope extends "user" ? { user: any } : {};
+                scope extends "user" ? { user: any } : object;
 
 export type Context<scope extends Scope> = {
     request: Request
     response: Response
 } & ContextForScope<scope>
 
-export type Request = {
+export interface Request {
     body: string;
     bodyAsStream: ReadableStream<Uint8Array>;
-    headers: Array<{ name: string, value: string }>;
+    headers: { name: string, value: string }[];
     path: string;
     fullPath: string;
     method: Method;
-    parameterNames: Array<string>;
+    parameterNames: string[];
     json(): any;
     getParameter(name: string): string | undefined;
-    getParameter(name: string): Array<string>;
+    getParameter(name: string): string[];
 }
 
-export type Response = {
+export interface Response {
     body: string;
     bodyAsStream: ReadableStream<Uint8Array>;
     code: number;

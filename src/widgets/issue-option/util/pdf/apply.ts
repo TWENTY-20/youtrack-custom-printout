@@ -6,10 +6,11 @@ import {Attachment} from "../../entities/youtrack.ts";
 import {extractValueAsString, parseCustomTextFields} from "./parse.ts";
 import {comment} from "./components.ts";
 import {reworkDoc} from "./check.ts";
+import {imageKey} from "./images.ts";
 
 
 export function applyPdfConfig(pdfConfiguration: PdfConfiguration, t: (s: string) => string) {
-    const schema = templates.default_content_top;
+    const schema = {...templates.default_content_top};
     schema.header.columns = applyHeaders(schema.header.columns, pdfConfiguration)
     schema.content = applyContents(schema.content, pdfConfiguration, t) as []
     if (pdfConfiguration.include_attachments) {
@@ -22,7 +23,7 @@ export function applyPdfConfig(pdfConfiguration: PdfConfiguration, t: (s: string
     schema.footer = applyFooter(pdfConfiguration.include_footer)
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    schema.content = reworkDoc(schema.content)
+    schema.content = reworkDoc(schema.content, new Set(Object.keys(schema.images)))
     return schema
 }
 
@@ -93,19 +94,16 @@ export function applyContents(contents: Section[], pdfConfiguration: PdfConfigur
 
 export function applyFooter(pageNumbering: boolean) {
     return pageNumbering ?
-        function (currentPage: any, pageCount: any) {
-            return {
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-                text: currentPage.toString() + ' / ' + pageCount,
-                alignment: 'center',
-            }
-        }
-        : ""
+        (currentPage: number, pageCount: number) => ({
+            text: currentPage.toString() + ' / ' + pageCount,
+            alignment: 'center',
+        })
+        : undefined
 }
 
 export function applyImages(attachments: Attachment[]): object {
     const IMAGE_MIME_TYPES = ['image/png', 'image/jpeg']
     const filteredAttachments = attachments.filter(a => IMAGE_MIME_TYPES.includes(a.mimeType))
-    return filteredAttachments.reduce((o, current) => ({...o, [current.name.replace('.', '')]: current.base64Content}), {})
+    return filteredAttachments.reduce((o, current) => ({...o, [imageKey(current.name)]: current.base64Content}), {})
 }
 

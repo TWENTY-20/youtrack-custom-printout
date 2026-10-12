@@ -19,7 +19,7 @@ export default function CustomFieldsSection() {
             return f
         })
         setConfig({...config, customFields: fields, include_customFields: allUnselected})
-    }, [config])
+    }, [config, setConfig])
 
     function allFieldsOff(fields: CustomField[]) {
         const r = fields.filter(f => f.included)
@@ -31,7 +31,7 @@ export default function CustomFieldsSection() {
             <ClickableLink className={'link'} onClick={setAllFields}>{t(allFieldsOff(config.customFields) ? 'selectAll' : 'unselectAll')}</ClickableLink>
             <hr className={'solid'}/>
             {config.customFields.map((customField: CustomField, index: number) =>
-                <Checkbox key={index} checked={customField.included} labelClassName={'pb-4 pr-4'} label={customField.name} onChange={() => {
+                <Checkbox key={customField.id} checked={customField.included} labelClassName={'pb-4 pr-4'} label={customField.name} onChange={() => {
                     const fields = config.customFields
                     fields[index].included = !customField.included
                     setConfig({...config, customFields: fields, include_customFields: !allFieldsOff(fields)})

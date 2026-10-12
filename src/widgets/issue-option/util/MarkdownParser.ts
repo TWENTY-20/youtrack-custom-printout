@@ -2,13 +2,13 @@ import markdownit from 'markdown-it'
 import htmlToPdfMake from 'html-to-pdfmake'
 
 export function processMarkdown(body: string | undefined | null, removeImages: boolean): [] {
-    if (!body) body = ""
+    let raw = body ?? "" ;
     // removes markdown image tags if attachments should not be included
-    if (removeImages) body = body.replace(/!\[.*?]\((.*?)\)/g, '')
+    if (removeImages) raw = raw.replace(/!\[.*?]\((.*?)\)/g, '')
     // removes markdown svg image tags, because svgs are not supported by pdfmake
-    body = body.replace(/!\[[^\]]*]\(([^)]+\.svg)\)/g, '')
-    body = body.replace(/\{width=(.*?)}/g, '')
+    raw = raw.replace(/!\[[^\]]*]\(([^)]+\.svg)\)/g, '')
+    raw = raw.replace(/\{width=(.*?)}/g, '')
     const markdownParser = markdownit()
-    const html = markdownParser.render(body)
+    const html = markdownParser.render(raw)
     return htmlToPdfMake(html) as [];
 }

@@ -1,7 +1,7 @@
 import {Host} from "./entities/types.ts";
 
 
-type YouTrackApp = {
+interface YouTrackApp {
     locale: string,
     register: () => Promise<Host>,
     entity: {
@@ -14,7 +14,7 @@ type YouTrackApp = {
         login: string,
         name: string,
     }
-};
+}
 
 declare const YTApp: YouTrackApp;
 

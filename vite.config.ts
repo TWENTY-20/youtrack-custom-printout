@@ -48,7 +48,7 @@ export default defineConfig(({mode}) => {
             outDir: '../build',
             emptyOutDir: false,
             copyPublicDir: false,
-            sourcemap: false,
+            sourcemap: true,
             target: ['es2022'],
             assetsDir: 'widgets/assets',
             rollupOptions: {

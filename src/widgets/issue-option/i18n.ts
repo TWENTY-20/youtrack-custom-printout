@@ -7,8 +7,7 @@ let translations;
 if (YTApp.locale !== "en") {
     translations = await host.fetchApp(`backend/translate?lang=${YTApp.locale}`, {}).then(({ translation }: {
         translation: ResourceLanguage
-    }) => translation).catch(() => {
-    });
+    }) => translation).catch(console.error);
 }
 
 await i18next
